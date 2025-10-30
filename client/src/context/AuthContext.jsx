@@ -49,28 +49,37 @@ export const AuthProvider = ({children}) => {
     }
   };
 
-    const signup = async (user) => {
-        try {
-            const res = await registerRequest(user);
-            setUser(res.data);
-            setIsAuthenticate(true);
-        } catch (error) {
-            setErrors(error.response.data);
-        }
+const signup = async (user) => {
+  try {
+    const res = await registerRequest(user);
+    setUser(res.data);
+    setIsAuthenticate(true);
+  } catch (error) {
+    const data = error.response?.data;
+    if (Array.isArray(data)) {
+      setErrors(data);
+    } else {
+      setErrors([data?.message || error.message || "Error desconocido"]);
     }
+  }
+}
 
-    const signin = async (user) => {
-        try {
-            const res = await loginRequest(user);
-            setIsAuthenticate(true);
-            setUser(res.data);
-        } catch (error) {
-            if (Array.isArray(error.response.data)) {
-                return setErrors(error.response.data);
-            }
-            setErrors([error.response.data.message]);
-        }
+const signin = async (user) => {
+  try {
+    const res = await loginRequest(user);
+    setIsAuthenticate(true);
+    setUser(res.data);
+  } catch (error) {
+    const data = error.response?.data;
+    if (Array.isArray(data)) {
+      setErrors(data);
+      return;
     }
+    setErrors([data?.message || error.message || "Error al iniciar sesión"]);
+    console.error("Signin error (detalle):", error);
+  }
+}
+
     
     const createUser = async (userData) => {
     try {
