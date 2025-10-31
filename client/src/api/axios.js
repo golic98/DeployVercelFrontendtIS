@@ -1,6 +1,6 @@
 import axios from "axios";
 const instance = axios.create({
-    baseURL: '/api',
+    baseURL: 'https://deploy-vercel-backend-is.vercel.app/api',
     withCredentials: true,
     timeout: 10000
 });
