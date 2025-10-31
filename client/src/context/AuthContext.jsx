@@ -145,7 +145,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     async function checkLogin() {
       try {
-        const res = await verifyTokenRequest(); // sin argumentos
+        const res = await verifyTokenRequest(); 
         if (!res.data) {
           setIsAuthenticate(false);
           setUser(null);
