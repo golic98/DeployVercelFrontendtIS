@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
   const signup = async (user) => {
     try {
       const res = await registerRequest(user);
-      setUser(res.data);
+      setUser(res.data.user);
       setIsAuthenticate(true);
     } catch (error) {
       setErrors(error.response.data);
@@ -57,9 +57,8 @@ export const AuthProvider = ({ children }) => {
   const signin = async (user) => {
     try {
       const res = await loginRequest(user);
+      setUser(res.data.user);
       setIsAuthenticate(true);
-      setUser(res.data);
-      console.log("Navegando");
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
