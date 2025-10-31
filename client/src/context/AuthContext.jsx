@@ -79,8 +79,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    const res = await loginRequest(user);
-    Cookies.remove(res.data.token);
+    Cookies.remove("token");
     setIsAuthenticate(false);
     setUser(null);
   };
