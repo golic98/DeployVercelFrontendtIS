@@ -79,6 +79,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    console.log(user.token);
     Cookies.remove("token");
     setIsAuthenticate(false);
     setUser(null);
@@ -144,9 +145,8 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     async function checkLogin() {
-      const cookies = Cookies.get();
       try {
-        const res = await verifyTokenRequest(cookies.token); 
+        const res = await verifyTokenRequest(); 
         if (!res.data) {
           setIsAuthenticate(false);
           setUser(null);
