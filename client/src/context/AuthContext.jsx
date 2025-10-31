@@ -59,6 +59,7 @@ export const AuthProvider = ({ children }) => {
       const res = await loginRequest(user);
       setIsAuthenticate(true);
       setUser(res.data);
+      console.log("Navegando");
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
