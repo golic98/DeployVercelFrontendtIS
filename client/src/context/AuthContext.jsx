@@ -64,11 +64,8 @@ export const AuthProvider = ({ children }) => {
       console.log("AuthContext: respuesta login:", res);
       setIsAuthenticate(true);
       setUser(res.data);
-      // si quieres guardar token manualmente (opcional si usas cookie HttpOnly)
-      // Cookies.set("token", res.data.token);
       return res.data;
     } catch (error) {
-      // logs detallados para depuración
       console.error("Signin error (detalle):", error);
       console.error("error.toJSON():", error.toJSON?.());
       console.error("error.request:", error.request);
