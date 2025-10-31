@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router";
 import { Link } from "react-router";
-import { useEffect, useState } from "react-router";
+import { useEffect, useState } from "react";
 import "./Login.css";
 import ResetPassword from "../login-access/ResetPassword";
 

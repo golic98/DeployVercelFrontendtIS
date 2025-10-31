@@ -1,4 +1,3 @@
-// src/context/AuthContext.jsx
 import { createContext, useState, useContext, useEffect } from "react";
 import {
   registerRequest,
@@ -45,40 +44,28 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const signup = async (userData) => {
+  const signup = async (user) => {
     try {
-      const res = await registerRequest(userData);
+      const res = await registerRequest(user);
       setUser(res.data);
       setIsAuthenticate(true);
     } catch (error) {
-      const data = error.response?.data;
-      setErrors(Array.isArray(data) ? data : [data?.message || error.message || "Error en signup"]);
-      console.error("signup error:", error);
+      setErrors(error.response.data);
     }
-  };
+  }
 
-  const signin = async (userCredentials) => {
-    console.log("AuthContext: signin llamado con:", userCredentials);
+  const signin = async (user) => {
     try {
-      const res = await loginRequest(userCredentials);
-      console.log("AuthContext: respuesta login:", res);
+      const res = await loginRequest(user);
       setIsAuthenticate(true);
       setUser(res.data);
-      return res.data;
     } catch (error) {
-      console.error("Signin error (detalle):", error);
-      console.error("error.toJSON():", error.toJSON?.());
-      console.error("error.request:", error.request);
-      console.error("error.response:", error.response);
-
-      const data = error.response?.data;
-      if (Array.isArray(data)) {
-        setErrors(data);
-        return;
+      if (Array.isArray(error.response.data)) {
+        return setErrors(error.response.data);
       }
-      setErrors([data?.message || error.message || "Error al iniciar sesión"]);
+      setErrors([error.response.data.message]);
     }
-  };
+  }
 
   const createUser = async (userData) => {
     try {
@@ -163,7 +150,7 @@ export const AuthProvider = ({ children }) => {
       }
       try {
         const res = await verifyTokenRequest(cookies.token);
-        if (!res?.data) {
+        if (!res.data) {
           setIsAuthenticate(false);
           setLoading(false);
           return;
