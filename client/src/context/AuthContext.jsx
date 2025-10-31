@@ -59,6 +59,7 @@ export const AuthProvider = ({ children }) => {
       const res = await loginRequest(user);
       setUser(res.data.user);
       setIsAuthenticate(true);
+      console.log(res.data.user);
     } catch (error) {
       const data = error.response?.data;
       if (Array.isArray(data)) {
@@ -79,7 +80,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    console.log(data);
     Cookies.remove("token");
     setIsAuthenticate(false);
     setUser(null);
