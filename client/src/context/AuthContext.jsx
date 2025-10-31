@@ -79,6 +79,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    console.log("Borrando cookie");
     Cookies.remove("token");
     setIsAuthenticate(false);
     setUser(null);
