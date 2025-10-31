@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data.user);
       setIsAuthenticate(true);
     } catch (error) {
-      setErrors(error.response.data);
+      setErrors(error.response?.data);
     }
   }
 
@@ -60,12 +60,14 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data.user);
       setIsAuthenticate(true);
     } catch (error) {
-      if (Array.isArray(error.response.data)) {
-        return setErrors(error.response.data);
+      const data = error.response?.data;
+      if (Array.isArray(data)) {
+        setErrors(data);
+        return;
       }
-      setErrors([error.response.data.message]);
+      setErrors([data?.message || "Error al iniciar sesión"]);
     }
-  }
+  };
 
   const createUser = async (userData) => {
     try {
@@ -142,16 +144,11 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     async function checkLogin() {
-      const cookies = Cookies.get();
-      if (!cookies.token) {
-        setIsAuthenticate(false);
-        setLoading(false);
-        return setUser(null);
-      }
       try {
-        const res = await verifyTokenRequest(cookies.token);
+        const res = await verifyTokenRequest(); // sin argumentos
         if (!res.data) {
           setIsAuthenticate(false);
+          setUser(null);
           setLoading(false);
           return;
         }
