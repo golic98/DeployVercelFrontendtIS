@@ -32,38 +32,40 @@ export default function CreateTaskForm({ close }) {
     };
 
     const onSubmit = async (data) => {
-            if (imageBase64) {
-                const formData = { ...data, image: imageBase64 };
-                try {
-                    await createTask2(formData);
-                    Swal.fire({
-                        title: "¡Anuncio creado!",
-                        text: "Tu anuncio se ha guardado correctamente.",
-                        icon: "success",
-                        confirmButtonColor: "#2563eb",
-                        confirmButtonText: "Aceptar",
-                        background: "#fefefe",
-                        color: "#1e293b",
-                        timer: 2000,
-                        timerProgressBar: true,
-                    }).then(() => navigate("/admin"));
-                } catch (err) {
-                    Swal.fire({
-                        title: "Error",
-                        text: "No se pudo crear el anuncio.",
-                        icon: "error",
-                        confirmButtonColor: "#dc2626",
-                    });
-                }
-            } else {
-                setImageError("La imagen no es válida o no se ha seleccionado ninguna.");
+        if (imageBase64) {
+            const formData = { ...data, image: imageBase64 };
+            try {
+                await createTask2(formData);
+                Swal.fire({
+                    title: "¡Anuncio creado!",
+                    text: "Tu anuncio se ha guardado correctamente.",
+                    icon: "success",
+                    confirmButtonColor: "#2563eb",
+                    confirmButtonText: "Aceptar",
+                    background: "#fefefe",
+                    color: "#1e293b",
+                    timer: 2000,
+                    timerProgressBar: true,
+                });
+                await new Promise((resolve) => setTimeout(resolve, 800));
+                navigate("/admin");
+            } catch (err) {
+                Swal.fire({
+                    title: "Error",
+                    text: "No se pudo crear el anuncio.",
+                    icon: "error",
+                    confirmButtonColor: "#dc2626",
+                });
             }
-        };
+        } else {
+            setImageError("La imagen no es válida o no se ha seleccionado ninguna.");
+        }
+    };
 
     return (
         <div className="flex flex-col items-stretch bg-white p-32 rounded-xl shadow-lg w-500 h-full">
             <header className="bg-dark-green p-16 rounded-xl mb-8 text-center shadow-lg">
-                <h2 style={{color: "white"}} className="m-0 text-center text-[1.5rem] text-white">Creación de Anuncio</h2>
+                <h2 style={{ color: "white" }} className="m-0 text-center text-[1.5rem] text-white">Creación de Anuncio</h2>
             </header>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 shadow-lg rounded-xl w-full my-8 mx-0 p-16 bf-white">
                 <div className="flex flex-col gap-4">

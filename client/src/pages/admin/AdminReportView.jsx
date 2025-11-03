@@ -1,6 +1,5 @@
 import Popup from "reactjs-popup";
 import ReportTable from "../../components/tables/ReportTable";
-import assets from "../../assets";
 import CreateReportForm from "../../components/forms/CreateReportForm";
 import { useTask } from "../../context/TaskContext";
 import { useEffect } from "react";

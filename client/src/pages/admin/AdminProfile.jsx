@@ -1,6 +1,6 @@
 import { useAuth } from "../../context/AuthContext";
 import assets from "../../../src/assets";
-import UpdateUserForm from "../../components/forms/UpdateUserForm";
+import UpdateAdminForm from "../../components/forms/UpdateAdminForm";
 import Popup from "reactjs-popup";
 
 export default function AdminProfile() {
@@ -18,7 +18,7 @@ export default function AdminProfile() {
                     duration-300 ease-in-out shadow-md hover:bg-dark-slate">Editar Perfil</button>} lockScroll={true}
                         position="top center" closeOnDocumentClick={false} modal={true} overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
                         contentStyle={{ maxHeight: '95%', overflow: 'auto' }}>
-                        {close => <UpdateUserForm user={user} close={close} />}
+                        {close => <UpdateAdminForm user={user} close={close} />}
                     </Popup>
                 </div>
 

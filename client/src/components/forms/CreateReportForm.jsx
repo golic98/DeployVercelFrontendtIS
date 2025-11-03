@@ -45,7 +45,9 @@ export default function CreateReportForm({ close }) {
                     color: "#1e293b",
                     timer: 2000,
                     timerProgressBar: true,
-                }).then(() => navigate("/admin"));
+                });
+                await new Promise((resolve) => setTimeout(resolve, 800));
+                navigate("/admin");
             } catch (err) {
                 Swal.fire({
                     title: "Error",

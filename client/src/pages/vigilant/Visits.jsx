@@ -85,46 +85,6 @@ export default function Visits() {
 
     return (
         <div>
-            <header>
-                <div></div>
-                <div className="menu">
-                    <Link to="/vigilant">
-                        <img src={assets.casa} alt="Inicio" className="menu-icon" />
-                    </Link>
-                    <div className="profile-menu">
-                        <button
-                            className="profile-button"
-                            onClick={toggleMenu}
-                            onBlur={() => setTimeout(() => setIsMenuOpen(false), 200)}
-                        >
-                            <img src={assets.usuario1} alt="Perfil" className="profile-icon" />
-                        </button>
-                        {isMenuOpen && (
-                            <div className={`dropdown-menu ${isMenuOpen ? "open" : ""}`}>
-                                <Link to="/profileVigilant" className="menu-item">
-                                    <img src={assets.ojo} alt="Ver perfil" className="menu-item-icon" />
-                                    Ver perfil
-                                </Link>
-                                <button
-                                    onClick={() => {
-                                        logout();
-                                        navigate("/");
-                                    }}
-                                    className="menu-item"
-                                >
-                                    <img
-                                        src={assets.cerrarSesion}
-                                        alt="Cerrar sesión"
-                                        className="menu-item-icon"
-                                    />
-                                    Cerrar sesión
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </header>
-
             <div>
                 <h3 className="section-title">Registro de visitas</h3>
 

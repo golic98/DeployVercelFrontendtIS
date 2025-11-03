@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import Swal from "sweetalert2";
 
-export default function UpdateUserForm({ user, close }) {
+export default function UpdateUserNormalForm({ user, close }) {
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         defaultValues: { ...(user ?? {}), password: "" }
     });
@@ -39,7 +39,7 @@ export default function UpdateUserForm({ user, close }) {
                 });
                 close();
                 await new Promise((resolve) => setTimeout(resolve, 600));
-                navigate("/admin");
+                navigate("/user");
             } catch (error) {
                 console.error(error);
                 Swal.fire({

@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
             setUser(res.data);
             setIsAuthenticate(true);
         } catch (error) {
-            setErrors(error.response.data);
+            console.log(error);
         }
     }
 
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
             setUser(res.data);
             setIsAuthenticate(true);
         } catch (error) {
-            setErrors(error.response.data);
+            console.log("Revise que los campos sean correctos");
         }
     }
 

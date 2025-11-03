@@ -131,39 +131,6 @@ export default function Schedule() {
 
     return (
         <div className="schedule">
-            <header className="schedule-header">
-                <div className="menu-bar">
-                    <div></div>
-                    <div className="menu-right">
-                        <img
-                            src={assets.casa}
-                            alt="Inicio"
-                            className="menu-icon"
-                            onClick={() => navigate("/vigilant")}
-                        />
-                        <div className="user-menu">
-                            <img
-                                src={assets.usuario1}
-                                alt="Usuario"
-                                className="menu-icon"
-                                onClick={toggleDropdown}
-                            />
-                            {dropdownVisible && (
-                                <ul className="dropdown">
-                                    <li onClick={() => navigate("/profileVigilant")}>
-                                        <img src={assets.ojo} alt="Ver perfil" className="dropdown-icon" />
-                                        Ver perfil
-                                    </li>
-                                    <li onClick={handleLogout}>
-                                        <img src={assets.cerrarSesion} alt="Cerrar sesión" className="dropdown-icon" />
-                                        Cerrar sesión
-                                    </li>
-                                </ul>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </header>
             {/* Contenido principal */}
             <div className="schedule-content">
                 <div className="add-schedule-wrapper">

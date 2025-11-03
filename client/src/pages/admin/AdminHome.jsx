@@ -8,7 +8,6 @@ import Popup from "reactjs-popup";
 export default function AdminHome() {
     const navigate = useNavigate();
     const [paying, openPay] = useState();
-
     const closePopup = () => openPay(false);
 
     const menuCards = [
@@ -26,6 +25,5 @@ export default function AdminHome() {
                 <PayVigilanceForm close={closePopup} />
             </Popup>
         </div>
-
     );
 }

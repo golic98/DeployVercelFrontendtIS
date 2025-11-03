@@ -1,8 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import AdminLayout from './pages/admin/AdminLayout.jsx'
+import UserNormalLayout from './pages/login-access/UserNormalLayaout.jsx'
+import VigilantLayout from './pages/vigilant/VigilantLayaout.jsx'
 import AdminHome from './pages/admin/AdminHome.jsx'
 import AdminUserView from './pages/admin/AdminUserView.jsx'
 import AdminTaskView from './pages/admin/AdminTaskView.jsx'
@@ -25,10 +26,11 @@ import ProtectedRouteUser from "./protected/ProtectedRouteUser.jsx";
 import ProfileUpdate from "./pages/login-access/ProfileUpdate.jsx";
 import ProfileVigilant from "./pages/vigilant/ProfileVigilant.jsx";
 import VigilantUpdate from "./pages/vigilant/VigilantUpdate.jsx";
-import UserReport from "./pages/login-access/UserReport.jsx";
-import UserAnuncios from "./pages/login-access/UserAnuncios.jsx";
-import Users from "./pages/login-access/Users.jsx";
+import UserNormalReportView from './pages/login-access/UserNormalReportView.jsx'
+import UserNormalAnunciosView from './pages/login-access/UserNormalAnunciosView.jsx'
+import UserNormalView from './pages/login-access/UserNormalView.jsx'
 import ProtectedRouteAdmin from './protected/ProtectedRouteAdmin.jsx'
+import './index.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -43,23 +45,25 @@ createRoot(document.getElementById('root')).render(
             <Route element={<ProtectedRoute />} >
 
               <Route element={<ProtectedRouteUser />}>
-                <Route path="/user" element={<LoginAccess />}> /</Route>
-                <Route path="/userReport" element={<UserReport />} />
-                <Route path="/userAnuncios" element={<UserAnuncios />} />
-                <Route path="/profile/:id" element={<ProfileUpdate />} />
-                <Route path="/payVigilance" element={<PayVigilance />}> /</Route>
-                <Route path="/profile" element={<Profile />}> /</Route>
-                <Route path="/allUsers" element={<Users />}> /</Route>
-                <Route path="/userAnuncios" element={<UserAnuncios />}> /</Route>
-                <Route path="/userReport" element={<UserReport />}> /</Route>
+                <Route element={<UserNormalLayout />}>
+                  <Route path="/user" element={<LoginAccess />}> /</Route>
+                  <Route path="/userReport" element={<UserNormalReportView />} />
+                  <Route path="/profile/:id" element={<ProfileUpdate />} />
+                  <Route path="/payVigilance" element={<PayVigilance />}> /</Route>
+                  <Route path="/profile" element={<Profile />}> /</Route>
+                  <Route path="/allUsers" element={<UserNormalView />}> /</Route>
+                  <Route path="/userAnuncios" element={<UserNormalAnunciosView />}> /</Route>
+                </Route>
               </Route>
 
               <Route element={<ProtectedRouteVigilant />}>
-                <Route path="/vigilant" element={<Vigilant />}> /</Route>
-                <Route path="/visits" element={<Visits />}> /</Route>
-                <Route path="/profileVigilant" element={<ProfileVigilant />} />
-                <Route path="/editVigilant/:id" element={<VigilantUpdate />} />
-                <Route path="/schedules" element={<Schedules />}> /</Route>
+                <Route element={<VigilantLayout />}>
+                  <Route path="/vigilant" element={<Vigilant />}> /</Route>
+                  <Route path="/visits" element={<Visits />}> /</Route>
+                  <Route path="/profileVigilant" element={<ProfileVigilant />} />
+                  <Route path="/editVigilant/:id" element={<VigilantUpdate />} />
+                  <Route path="/schedules" element={<Schedules />}> /</Route>
+                </Route>
               </Route>
 
               <Route element={<ProtectedRouteAdmin />}>
