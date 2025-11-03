@@ -40,11 +40,11 @@ export default function NavBar() {
                         <button className="flex justify-between items-center g-10 bg-none border-none cursor-pointer text-[1rem] text-left
                         py-8 px-10 rounded-xl duration-300 ease-in-out text-white hover:bg-dark-slate" onClick={() => { navigate("/admin/profile") }}>
 
-                            <p>Ver Perfil </p><img className="h-20 w-20" src={assets.girar} alt="Ver Perfil" />
+                            <p style={{color: "white"}}>Ver Perfil </p><img className="h-20 w-20" src={assets.girar} alt="Ver Perfil" />
                         </button>
                         <button className="flex justify-between items-center g-10 bg-none border-none cursor-pointer text-[1rem] text-left
                         py-8 px-10 rounded-xl duration-300 ease-in-out text-white hover:bg-dark-slate" onClick={() => { logout() }} >
-                            <p>Cerrar sesión</p>
+                            <p style={{color: "white"}}>Cerrar sesión</p>
                             <img className="h-20 w-20" src={assets.cerrarSesion} alt="Cerrar sesión" />
                         </button>
                     </div>

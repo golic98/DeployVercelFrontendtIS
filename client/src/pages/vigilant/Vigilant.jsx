@@ -32,6 +32,7 @@ function Vigilant() {
                             src={assets.usuario1}
                             alt="Perfil"
                             className="profile-icon"
+                            style={{ width: '40px' }}
                         />
                     </button>
                     {isMenuOpen && (

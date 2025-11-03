@@ -1,17 +1,15 @@
-import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import assets from "../../../src/assets";
-import "./LoginAccess.css";
 import ButtonAddReporteNormal from "../../components/ButtonAddReporteNormal.jsx";
 import ButtonAddAnuncioNormal from "../../components/ButtonAddAnuncioNormal.jsx";
+import "./LoginAccess.css";
 
 function UserHome() {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [formOpen, setFormOpen] = useState(false);
-    const { logout, user, getUsers } = useAuth();
+    const { logout } = useAuth();
     const navigate = useNavigate();
-    const [selectedOption, setSelectedOption] = useState("");
     const [showButtonReporteByNormal, setShowButtonReporteByNormal] = useState(false);
     const [showButtonAnuncioByNormal, setShowButtonAnuncioByNormal] = useState(false);
 
@@ -45,22 +43,17 @@ function UserHome() {
         setMenuOpen(!menuOpen);
     }
 
-    function toggleForm() {
-        setFormOpen(!formOpen);
-    }
-
     return (
         <div className="user-home-container">
-            <nav className="user-home-navbar">
+            <nav className="login-navbar">
                 <div className="user-home-navbar-left">
-                    
-                </div>
-                <div className="user-home-navbar-right">
                     <img
                         src={assets.casa}
                         alt="Inicio"
                         className="user-home-icono"
                     />
+                </div>
+                <div className="user-home-navbar-right">
                     <div className="user-home-dropdown">
                         <Link to="/profile">
                             <img
@@ -93,8 +86,8 @@ function UserHome() {
             )}
 
             <div className="user-home-contenido">
-                <div className="user-home-cards">
-                    <div className="user-home-card" onClick={handleButtonClick}>
+                <div className="user-home-cards-normal">
+                    <div className="user-home-card-normal" onClick={handleButtonClick}>
                         <img src={assets.formularioDeLlenado} alt="Reportes" />
                         <p className="user-home-card-texto">Reportes</p>
                     </div>

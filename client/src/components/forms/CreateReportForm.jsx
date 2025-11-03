@@ -1,12 +1,15 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { useState } from "react";
 import { useTask } from "../../context/TaskContext";
+import Swal from "sweetalert2";
 
 export default function CreateReportForm({ close }) {
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
     const { createTask } = useTask();
     const [imageBase64, setImageBase64] = useState("");
     const [imageError, setImageError] = useState("");
+    const navigate = useNavigate();
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
@@ -17,7 +20,6 @@ export default function CreateReportForm({ close }) {
                 setImageBase64("");
                 return;
             }
-
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImageBase64(reader.result);
@@ -28,11 +30,30 @@ export default function CreateReportForm({ close }) {
         }
     };
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         if (imageBase64) {
             const formData = { ...data, image: imageBase64 };
-            createTask(formData);
-            window.location.reload();
+            try {
+                await createTask(formData);
+                Swal.fire({
+                    title: "¡Publicación creada!",
+                    text: "Tu publicación se ha guardado correctamente.",
+                    icon: "success",
+                    confirmButtonColor: "#2563eb",
+                    confirmButtonText: "Aceptar",
+                    background: "#fefefe",
+                    color: "#1e293b",
+                    timer: 2000,
+                    timerProgressBar: true,
+                }).then(() => navigate("/admin"));
+            } catch (err) {
+                Swal.fire({
+                    title: "Error",
+                    text: "No se pudo crear la publicación.",
+                    icon: "error",
+                    confirmButtonColor: "#dc2626",
+                });
+            }
         } else {
             setImageError("La imagen no es válida o no se ha seleccionado ninguna.");
         }
@@ -41,7 +62,7 @@ export default function CreateReportForm({ close }) {
     return (
         <div className="flex flex-col items-stretch bg-white p-32 rounded-xl shadow-lg w-500 h-full">
             <header className="bg-dark-green p-16 rounded-xl mb-8 text-center shadow-lg">
-                <h2 className="m-0 text-center text-[1.5rem] text-white">Creación de Reporte</h2>
+                <h2 style={{ color: "white" }} className="m-0 text-center text-[1.5rem] text-white">Creación de Reporte</h2>
             </header>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 shadow-lg rounded-xl w-full my-8 mx-0 p-16 bf-white">
                 <div className="flex flex-col gap-4">

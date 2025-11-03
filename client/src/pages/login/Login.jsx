@@ -8,9 +8,13 @@ import ResetPassword from "../login-access/ResetPassword";
 
 function Login({ onClose }) {
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const { signin, errors: signinErrors, isAuthenticate, user } = useAuth();
+    const { signin, errors: signinErrorsRaw, isAuthenticate, user } = useAuth();
     const [showResetPassword, setReserPasswordModal] = useState(false);
     const navigate = useNavigate();
+
+    const signinErrors = Array.isArray(signinErrorsRaw)
+        ? signinErrorsRaw
+        : (signinErrorsRaw ? [signinErrorsRaw] : []);
 
     const handleReserPasswordClick = () => {
         setReserPasswordModal(true);
@@ -48,37 +52,35 @@ function Login({ onClose }) {
                     <hr className="login-divider-line" />
                     <hr className="login-divider-line" />
                 </div>
-                {
-                    signinErrors.map((error, i) => (
-                        <div className="login-error" key={i}>
-                            {error}
-                        </div>
-                    ))
-                }
+
+                {signinErrors.map((error, i) => (
+                    <div className="login-error" key={i}>
+                        {typeof error === "string" ? error : error.message}
+                    </div>
+                ))}
+
                 <form onSubmit={onSubmit} className="login-form">
-                    <input type="text" {...register("username", { required: true })}
+                    <input style={{ color: "white" }} type="text" {...register("username", { required: true })}
                         className="login-input"
                         placeholder="Usuario"
                     />
-                    {
-                        errors.username && (<p className="login-error-text">El usuario es requerido</p>)
-                    }
-                    <input type="password" {...register("password", { required: true })}
+                    {errors.username && (<p className="login-error-text">El usuario es requerido</p>)}
+
+                    <input style={{ color: "white" }} type="password" {...register("password", { required: true })}
                         className="login-input"
                         placeholder="Contraseña"
                     />
-                    {
-                        errors.password && (<p className="login-error-text">La contraseña es requerida</p>)
-                    }
-                    <button style={{background: "white", color: "black"}} type="submit" className="login-button">Aceptar</button>
+                    {errors.password && (<p className="login-error-text">La contraseña es requerida</p>)}
+
+                    <button style={{ background: "white", color: "black" }} type="submit" className="login-button">Aceptar</button>
                 </form>
-                <p style={{color: "white"}}>¿Olvidaste tu clave? <Link to={"/"} style={{color: "white"}} className="login-register-link" onClick={handleReserPasswordClick}>Cambiar clave</Link></p>
-                <p style={{color: "white"}}>¿No tienes cuenta? <Link to={"/register"} style={{color: "white"}} className="login-register-link">Ve a registrarte</Link> </p>
-                <button style={{padding: "8px"}} onClick={onClose}>Cancelar</button>
+
+                <p style={{ color: "white" }}>¿Olvidaste tu clave? <Link to={"/"} style={{ color: "white" }} className="login-register-link" onClick={handleReserPasswordClick}>Cambiar clave</Link></p>
+                <p style={{ color: "white" }}>¿No tienes cuenta? <Link to={"/register"} style={{ color: "white" }} className="login-register-link">Ve a registrarte</Link> </p>
+                <button style={{ padding: "8px", cursor: "pointer" }} onClick={onClose}>Cancelar</button>
             </div>
             {showResetPassword && <ResetPassword onClose={handleCloseReserPasswordClick} />}
         </div>
-
     );
 }
 

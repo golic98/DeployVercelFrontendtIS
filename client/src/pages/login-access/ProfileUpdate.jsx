@@ -4,10 +4,10 @@ import { useParams, useNavigate, Link } from "react-router";
 import { useAuth } from "../../context/AuthContext";
 import bcrypt from "bcryptjs";
 import assets from "../../../src/assets";
+import Swal from "sweetalert2";
 import "./ProfileUpdate.css";
 
 export default function ProfileUpdate() {
-
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const { getOneProfile, updateProfile } = useAuth();
     const params = useParams();
@@ -26,16 +26,25 @@ export default function ProfileUpdate() {
             }
         }
         loadProfile();
-    }, []);
+    }, [params.id, setValue, getOneProfile]);
 
-    const onSubmit = handleSubmit((data) => {
-        if(data.password) {
-            const salt = bcrypt.genSaltSync(10);
-            data.password = bcrypt.hashSync(data.password, salt);
+    const onSubmit = handleSubmit(async (data) => {
+        const payload = { ...data };
+
+        if (!payload.password || payload.password.trim() === "") {
+            delete payload.password;
         }
+
         if (params.id) {
-            updateProfile(params.id, data);
-            navigate("/profile");
+            await updateProfile(params.id, payload);
+            Swal.fire({
+                title: '¡Perfil actualizado!',
+                text: 'Tus datos han sido actualizados correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                navigate("/profile");
+            });
         }
     });
 
@@ -45,7 +54,6 @@ export default function ProfileUpdate() {
                 <nav className="user-home-navbar">
                     <div className="user-home-navbar-left">
                         <Link>
-                            
                         </Link>
                     </div>
                     <div className="user-home-navbar-right">
@@ -65,7 +73,6 @@ export default function ProfileUpdate() {
                                 />
                             </Link>
                         </div>
-                        
                     </div>
                 </nav>
             </div>

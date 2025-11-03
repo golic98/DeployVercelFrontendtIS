@@ -13,9 +13,7 @@ export default function Profile() {
             <div>
                 <nav className="user-home-navbar">
                     <div className="user-home-navbar-left">
-                        <Link>
-                            
-                        </Link>
+                        
                     </div>
                     <div className="user-home-navbar-right">
                         <Link to="/user">

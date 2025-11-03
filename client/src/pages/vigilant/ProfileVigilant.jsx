@@ -28,7 +28,7 @@ export default function ProfileVigilant() {
                     <div className="left-side">
                         <img src={assets.usuario1} alt="Usuario" className="profile-pic" />
                         <h2>Vigilancia</h2>
-                        <p className="description">Descripción: Sistema de control de vigilancia</p>
+                        <p className="description">Sistema de control de vigilancia</p>
                         <Link to={`/editVigilant/${user.id}`} className="edit-button">Editar Perfil</Link>
                     </div>
 

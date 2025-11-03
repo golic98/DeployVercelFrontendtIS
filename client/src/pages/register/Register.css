@@ -66,8 +66,8 @@
 
 .register-password-toggle {
     position: absolute;
-    right: 15px;
-    top: 50%;
+    right: 24px;
+    top: 40%;
     transform: translateY(-50%);
     cursor: pointer;
     width: 24px;

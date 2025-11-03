@@ -16,6 +16,7 @@
     justify-content: space-between;
     padding: 0 1.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 70px;
   }
   
   /* Barra del menú */
@@ -48,6 +49,8 @@
   /* Dropdown para el menú de usuario */
   .user-menu {
     position: relative;
+    display: flex;
+    align-items: center;
   }
   
   .dropdown {

@@ -1,11 +1,13 @@
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { jsPDF } from "jspdf";
 import { useAuth } from "../../context/AuthContext";
+import Swal from "sweetalert2";
 
 export default function PayVigilanceForm({ close }) {
     const { register, handleSubmit, setError, clearErrors, formState: { errors } } = useForm();
     const { addPay, user } = useAuth();
+    const navigate = useNavigate();
 
     // Función para validar número de tarjeta usando el Algoritmo de Luhn
     const validarNumeroTarjeta = (numberTarget) => {
@@ -45,7 +47,7 @@ export default function PayVigilanceForm({ close }) {
         doc.save(`Factura_${new Date().getTime()}.pdf`);
     };
 
-    const onSubmit = (values) => {
+    const onSubmit = async (values) => {
         const { numberTarget, cvc } = values;
         if (!validarNumeroTarjeta(numberTarget)) {
             setError("numberTarget", { type: "manual", message: "Número de tarjeta inválido" });
@@ -59,19 +61,38 @@ export default function PayVigilanceForm({ close }) {
         } else {
             clearErrors("cvc");
         }
+        try {
+            // Procesar el pago y generar factura
+            await addPay(values);
 
-        addPay(values);
-        generarFacturaPDF(values);
-
-        alert("Pago realizado con éxito");
-        window.location.reload();
-    };
+            // Mostrar alerta con animación
+            await Swal.fire({
+                icon: "success",
+                title: "¡Pago realizado con éxito!",
+                text: "Tu transacción se ha completado correctamente.",
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+            });
+            await generarFacturaPDF(values);
+            close();
+            navigate("/admin");
+        } catch (err) {
+            console.error("Error al procesar el pago:", err);
+            Swal.fire({
+                icon: "error",
+                title: "Error en el pago",
+                text: "No se pudo completar la transacción. Intenta nuevamente.",
+                confirmButtonColor: "#d33",
+            });
+        };
+    }
 
     return (
 
         <div className="flex flex-col items-stretch bg-white p-32 rounded-xl shadow-lg w-500 h-full">
             <header className="bg-dark-green p-16 rounded-xl mb-8 text-center shadow-lg">
-                <h2 className="m-0 text-center text-[1.5rem] text-white">Pago de Vigilancia</h2>
+                <h2 style={{ color: "white" }} className="m-0 text-center text-[1.5rem] text-white">Pago de Vigilancia</h2>
             </header>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 shadow-lg rounded-xl w-full my-8 mx-0 p-16 bf-white">
                 <div className="flex flex-col gap-4">

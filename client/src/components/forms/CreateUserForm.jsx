@@ -1,24 +1,46 @@
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 export default function CreateUserForm({ close }) {
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
-    const { signup } = useAuth();
+    const { createUser } = useAuth();
+    const navigate = useNavigate();
 
-    const onSubmit = (data) => {
-        signup(data);
-        window.location.reload();
+    const onSubmit = async (data) => {
+        try {
+            await createUser(data);
+            Swal.fire({
+                title: "Usuario creado!",
+                text: "El usuario se ha creado correctamente.",
+                icon: "success",
+                confirmButtonColor: "#2563eb",
+                confirmButtonText: "Aceptar",
+                background: "#fefefe",
+                color: "#1e293b",
+                timer: 2000,
+                timerProgressBar: true,
+            }).then(() => navigate("/admin"));
+        } catch (error) {
+            Swal.fire({
+                title: "Error",
+                text: "No se pudo crear al usuario.",
+                icon: "error",
+                confirmButtonColor: "#dc2626",
+            });
+        }
     };
 
     return (
         <div className="flex flex-col items-stretch bg-white p-32 rounded-xl shadow-lg w-500 h-full">
             <header className="bg-dark-green p-16 rounded-xl mb-8 text-center shadow-lg">
-                <h2 className="m-0 text-center text-[1.5rem] text-white">Creación de Usuario</h2>
+                <h2 style={{ color: "white" }} className="m-0 text-center text-[1.5rem] text-white">Creación de Usuario</h2>
             </header>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 shadow-lg rounded-xl w-full my-8 mx-0 p-16 bf-white">
                 <div className="flex flex-col gap-4">
                     <label htmlFor="name" className="text-[1rem] font-[600] text-dark-slate">Nombre</label>
-                    <input type="text" {...register("name", { required: true })}
+                    <input id="name" type="text" {...register("name", { required: true })}
                         className="p-12 border border-mid-gray rounded-lg font-[1rem]"
                         placeholder="Ingrese el nombre del usuario"
                     />
@@ -28,7 +50,7 @@ export default function CreateUserForm({ close }) {
                 </div>
                 <div className="flex flex-col gap-4">
                     <label htmlFor="username" className="text-[1rem] font-[600] text-dark-slate">Username</label>
-                    <input type="text" {...register("username", { required: true })}
+                    <input id="username" type="text" {...register("username", { required: true })}
                         className="p-12 border border-mid-gray rounded-lg font-[1rem]"
                         placeholder="Ingrese el usuario nuevo"
                     />
@@ -38,7 +60,7 @@ export default function CreateUserForm({ close }) {
                 </div>
                 <div className="flex flex-col gap-4">
                     <label htmlFor="email" className="text-[1rem] font-[600] text-dark-slate">Email</label>
-                    <input type="email" {...register("email", { required: true })}
+                    <input id="email" type="email" {...register("email", { required: true })}
                         className="p-12 border border-mid-gray rounded-lg font-[1rem]"
                         placeholder="Ingrese su email"
                     />
@@ -48,7 +70,7 @@ export default function CreateUserForm({ close }) {
                 </div>
                 <div className="flex flex-col gap-4">
                     <label htmlFor="password" className="text-[1rem] font-[600] text-dark-slate">Contraseña</label>
-                    <input type="password" {...register("password", { required: true })}
+                    <input id="password" type="password" {...register("password", { required: true })}
                         className="p-12 border border-mid-gray rounded-lg font-[1rem]"
                         placeholder="Ingrese una contraseña para el usuario"
                     />
@@ -58,7 +80,7 @@ export default function CreateUserForm({ close }) {
                 </div>
                 <div className="flex flex-col gap-4">
                     <label htmlFor="telephone" className="text-[1rem] font-[600] text-dark-slate">Teléfono</label>
-                    <input type="text" {...register("telephone", { required: true })}
+                    <input id="telephone" type="text" {...register("telephone", { required: true })}
                         className="p-12 border border-mid-gray rounded-lg font-[1rem]"
                         placeholder="Ingrese el número de telefono"
                     />
@@ -69,6 +91,7 @@ export default function CreateUserForm({ close }) {
                 <div className="flex flex-col gap-4">
                     <label htmlFor="age" className="text-[1rem] font-[600] text-dark-slate">Edad</label>
                     <input
+                        id="age"
                         type="number"
                         min="0"
                         {...register("age", {

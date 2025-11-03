@@ -1,9 +1,9 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { 
-    registerRequest, 
-    loginRequest, 
-    verifyTokenRequest, 
-    getUsersAdmin, 
+import {
+    registerRequest,
+    loginRequest,
+    verifyTokenRequest,
+    getUsersAdmin,
     deleteUserAdmin,
     getOneProfileUser,
     updateOneProfile,
@@ -25,29 +25,29 @@ export const useAuth = () => {
     return context;
 };
 
-export const AuthProvider = ({children}) => {
+export const AuthProvider = ({ children }) => {
 
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState();
     const [users, setGetUsers] = useState([]);
     const [isAuthenticate, setIsAuthenticate] = useState(false);
     const [errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(true);
     const [getAdminUsers, setGetAdminUsers] = useState([]);
-    
-    
+
+
     const updatePasswordByPassword = async ({ username, password }) => {
-    try {
-      setErrors([]);
-      await updatePasswordRequest({ username, password });
-    } catch (error) {
-      const data = error.response?.data;
-      const msgs = Array.isArray(data)
-        ? data
-        : [data?.message || "Error al actualizar la contraseña"];
-      setErrors(msgs);
-      throw error;
-    }
-  };
+        try {
+            setErrors([]);
+            await updatePasswordRequest({ username, password });
+        } catch (error) {
+            const data = error.response?.data;
+            const msgs = Array.isArray(data)
+                ? data
+                : [data?.message || "Error al actualizar la contraseña"];
+            setErrors(msgs);
+            throw error;
+        }
+    };
 
     const signup = async (user) => {
         try {
@@ -62,24 +62,21 @@ export const AuthProvider = ({children}) => {
     const signin = async (user) => {
         try {
             const res = await loginRequest(user);
-            setIsAuthenticate(true);
             setUser(res.data);
+            setIsAuthenticate(true);
         } catch (error) {
-            if (Array.isArray(error.response.data)) {
-                return setErrors(error.response.data);
-            }
-            setErrors([error.response.data.message]);
+            setErrors(error.response.data);
         }
     }
-    
+
     const createUser = async (userData) => {
-    try {
-      await registerRequestByAdmin(userData);
-    } catch (error) {
-      const data = error.response?.data || { message: "Error desconocido" };
-      setErrors(Array.isArray(data) ? data : [data.message || data]);
-    }
-  };
+        try {
+            await registerRequestByAdmin(userData);
+        } catch (error) {
+            const data = error.response?.data || { message: "Error desconocido" };
+            setErrors(Array.isArray(data) ? data : [data.message || data]);
+        }
+    };
 
     const logout = () => {
         Cookies.remove("token");
@@ -101,17 +98,19 @@ export const AuthProvider = ({children}) => {
             const res = await getAllUsersForUser();
             setGetUsers(res.data);
         } catch (error) {
-           console.log(error);
+            console.log(error);
         }
     }
 
     const deleteUser = async (id) => {
-        const res = await deleteUserAdmin(id);
-        console.log(res);
-        window.location.reload();
+        try {
+            await deleteUserAdmin(id);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
-    const getOneProfile = async(id) => {
+    const getOneProfile = async (id) => {
         try {
             const res = await getOneProfileUser(id);
             return res.data;
@@ -120,13 +119,18 @@ export const AuthProvider = ({children}) => {
         }
     }
 
-    const updateProfile = async(id, profile) => {
+    const updateProfile = async (id, profile) => {
         try {
-            await updateOneProfile(id, profile);
+            const res = await updateOneProfile(id, profile);
+            const updated = res.data;
+
+            setUser(prev => ({ ...prev, ...updated }));
+            return updated;
         } catch (error) {
             console.log(error);
+            throw error;
         }
-    }
+    };
 
     const addPay = async (pay) => {
         try {
@@ -176,26 +180,26 @@ export const AuthProvider = ({children}) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ 
-            signup, 
-            loading, 
-            user, 
-            isAuthenticate, 
+        <AuthContext.Provider value={{
+            signup,
+            loading,
+            user,
+            isAuthenticate,
             setIsAuthenticate,
-            errors, 
-            signin, 
-            logout, 
-            getAdminUsers, 
+            errors,
+            signin,
+            logout,
+            getAdminUsers,
             getUsers,
             deleteUser,
             getOneProfile,
             updateProfile,
-            addPay, 
+            addPay,
             users,
             getAllUsers,
             createUser,
             updatePasswordByPassword
-            }}>
+        }}>
             {children}
         </AuthContext.Provider>
     )

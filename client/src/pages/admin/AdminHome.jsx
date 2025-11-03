@@ -16,10 +16,9 @@ export default function AdminHome() {
         { text: "Anuncios", image: assets.nota, callback: () => navigate("/admin/tasks") },
         { text: "Gestión de pagos", image: assets.dinero, callback: () => openPay(true) },
         { text: "Gestión de usuarios", image: assets.tarjetaDeIdentificacion, callback: () => navigate("/admin/users") },
-    ]
+    ];
 
     return (
-
         <div className="flex grow-1 flex-col justify-center items-center p-29 w-full box-border">
             <HomeCardContainer cards={menuCards} />
             <Popup open={paying} onClose={closePopup} lockScroll={true} position="top center" closeOnDocumentClick={false} modal={true}

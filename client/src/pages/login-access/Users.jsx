@@ -63,7 +63,7 @@ export default function Users() {
             </div>
 
             <div className="admin-header">
-                <h2>Lista de usuarios</h2>
+                <h2 className="font-sans text-[1.75rem] font-bold text-white m-0 text-center">Lista de usuarios</h2>
             </div>
 
             <div className="admin-users-container">

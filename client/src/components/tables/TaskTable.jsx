@@ -5,12 +5,14 @@ import TableView from "./TableView";
 import UpadteTaskForm from "../forms/UpdateTaskForm";
 import { useState } from "react";
 import { useTask } from "../../context/TaskContext";
+import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 export default function TaskTable({ tasks }) {
     const { deleteTask2 } = useTask();
     const [editing, editTask] = useState();
-
     const closePopup = () => editTask(null);
+    const navigate = useNavigate();
 
     const fields = {
         title: { width: 300 },
@@ -25,7 +27,7 @@ export default function TaskTable({ tasks }) {
         <>
             <TableView fields={fields}>
                 {tasks.map(i =>
-                    <TableCard key={i.id}>
+                    <TableCard key={i._id}>
                         <h2 className="text-[1.5rem] text-dark-gray font-bold">{i.title2}</h2>
                         <p className="text-[1rem] text-light-gray">{i.description2}</p>
                         <p className="text-[1rem] text-light-gray">Publicado: {new Date(i.date).toLocaleDateString()}</p>
@@ -35,7 +37,42 @@ export default function TaskTable({ tasks }) {
                             <button className="bg-custom-red text-white py-11 px-16 rounded-[8px]
                         cursor-pointer text-[1rem] font-bold gap-8 duration-300 ease-in-out mt-16
                         hover:bg-dark-red"
-                                onClick={() => { deleteTask2(i._id), window.location.reload(); }}>
+                                onClick={async() => {
+                                    const confirm = await Swal.fire({
+                                        title: "¿Eliminar anuncio?",
+                                        text: "Esta acción no se puede deshacer.",
+                                        icon: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonColor: "#d33",
+                                        cancelButtonColor: "#3085d6",
+                                        confirmButtonText: "Sí, eliminar",
+                                        cancelButtonText: "Cancelar",
+                                    });
+                                    if (confirm.isConfirmed) {
+                                        try {
+                                            await deleteTask2(i._id);
+                                            await Swal.fire({
+                                                title: "Eliminado",
+                                                text: "El anuncio se ha eliminado correctamente.",
+                                                icon: "success",
+                                                showConfirmButton: false,
+                                                timer: 1500,
+                                                timerProgressBar: true,
+                                            });
+                                            await new Promise((resolve) => setTimeout(resolve, 500));
+                                            navigate("/admin");
+
+                                        } catch (err) {
+                                            console.error(err);
+                                            Swal.fire({
+                                                title: "Error",
+                                                text: "Ocurrió un error al eliminar el anuncio.",
+                                                icon: "error",
+                                                confirmButtonColor: "#d33",
+                                            });
+                                        }
+                                    }
+                                }}>
                                 <MdDelete />
                             </button>
                             <button className="bg-custom-blue text-white py-11 px-16 rounded-[8px]

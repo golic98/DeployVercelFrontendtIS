@@ -9,16 +9,20 @@ function Register({ onClose }) {
     const [mostrarPassword, setMostrarPassword] = useState(false);
     const [verPassword, setVerPassword] = useState(false);
     const [verConfirmPassword, setVerConfirmPassword] = useState(false);
-
     const { register, handleSubmit, formState: { errors } } = useForm();
     const { signup, isAuthenticate, errors: registerErrors } = useAuth();
+    const [successMessage, setSuccessMessage] = useState("");
+    const [submitted, setSubmitted] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isAuthenticate) {
-            navigate("/login");
+        if (submitted) {
+            if (registerErrors.length === 0) {
+                setSuccessMessage("¡Cuenta creada con éxito!");
+            }
+            setSubmitted(false);
         }
-    }, [isAuthenticate, navigate]);
+    }, [registerErrors, submitted]);
 
     const onSubmit = handleSubmit(async (values) => {
         if (!mostrarPassword) {
@@ -39,8 +43,8 @@ function Register({ onClose }) {
                     role: values.role,
                     password: values.password,
                 };
-
-                signup(payload);
+                await signup(payload);
+                setSubmitted(true);
             } catch (error) {
                 console.error("Error al crear cuenta:", error);
             }
@@ -64,10 +68,11 @@ function Register({ onClose }) {
                     </button>
                 )}
 
-                <h2 style={{color: "white"}} className="register-title">Crea tu cuenta</h2>
+                <h2 style={{ color: "white" }} className="register-title">Crea tu cuenta</h2>
 
                 <form onSubmit={onSubmit} className="register-form">
                     <input
+                        style={{ color: "white" }}
                         type="text"
                         {...register("name", { required: true })}
                         className="register-input"
@@ -76,6 +81,7 @@ function Register({ onClose }) {
                     {errors.name && <p className="register-error-text">El nombre es requerido</p>}
 
                     <input
+                        style={{ color: "white" }}
                         type="text"
                         {...register("username", { required: true })}
                         className="register-input"
@@ -84,6 +90,7 @@ function Register({ onClose }) {
                     {errors.username && <p className="register-error-text">El usuario es requerido</p>}
 
                     <input
+                        style={{ color: "white" }}
                         type="email"
                         {...register("email", { required: true })}
                         className="register-input"
@@ -91,6 +98,7 @@ function Register({ onClose }) {
                     />
                     {errors.email && <p className="register-error-text">El email es requerido</p>}
                     <input
+                        style={{ color: "white" }}
                         type="telephone"
                         {...register("telephone", { required: true })}
                         className="register-input"
@@ -99,6 +107,7 @@ function Register({ onClose }) {
                     {errors.telephone && <p className="register-error-text">El teléfono es requerido</p>}
 
                     <input
+                        style={{ color: "white" }}
                         type="number"
                         {...register("age", { required: true })}
                         className="register-input"
@@ -112,6 +121,7 @@ function Register({ onClose }) {
                         <>
                             <div className="register-password-container">
                                 <input
+                                    style={{ color: "white" }}
                                     type={verPassword ? "text" : "password"}
                                     {...register("password", { required: true })}
                                     placeholder="Contraseña"
@@ -127,6 +137,7 @@ function Register({ onClose }) {
                             </div>
                             <div className="register-password-container">
                                 <input
+                                    style={{ color: "white" }}
                                     type={verConfirmPassword ? "text" : "password"}
                                     {...register("confirmPassword", { required: true })}
                                     placeholder="Confirmar Contraseña"
@@ -145,12 +156,23 @@ function Register({ onClose }) {
                         </>
                     )}
 
-                    <button style={{background: "white", color: "black"}} type="submit" className="register-next-button">
+                    <button style={{ background: "white", color: "black", padding: "6px" }} type="submit" className="register-next-button">
                         {mostrarPassword ? "Registrar" : "Siguiente"}
                     </button>
                 </form>
-                <p style={{color: "white"}}>¿Ya tienes cuenta? <Link to={"/login"} style={{color: "white"}} className="register-login-link">Inicia sesión</Link> </p>
-                <button style={{padding: "8px"}} onClick={onClose}>Cancelar</button>
+                <p style={{ color: "white" }}>¿Ya tienes cuenta? <Link to={"/login"} style={{ color: "white" }} className="register-login-link">Inicia sesión</Link> </p>
+                <button style={{ padding: "8px", cursor: "pointer" }} onClick={onClose}>Cancelar</button>
+                <br />
+                {registerErrors.map((error, i) => (
+                    <div key={i} className="register-error">
+                        {error}
+                    </div>
+                ))}
+                {successMessage && (
+                    <div className="register-error">
+                        {successMessage}
+                    </div>
+                )}
             </div>
         </div>
     );

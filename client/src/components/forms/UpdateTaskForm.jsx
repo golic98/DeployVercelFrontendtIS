@@ -1,19 +1,45 @@
 import { useForm } from "react-hook-form";
 import { useTask } from "../../context/TaskContext";
+import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 export default function CreateTaskForm({ task, close }) {
-    const { register, handleSubmit, reset, formState: { errors } } = useForm({ defaultValues: { title2: task.title2, description2: task.description2 } });
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({ 
+        defaultValues: { 
+            title2: task?.title2 ?? "", 
+            description2: task?.description2 ?? "" 
+        } 
+    });
     const { updateTask2 } = useTask();
+    const navigate = useNavigate();
 
-    const onSubmit = (data) => {
-        updateTask2(task._id, data);
-        window.location.reload();
+    const onSubmit = async (data) => {
+        try {
+            await updateTask2(task._id, data);
+            Swal.fire({
+                text: "Tu anuncio se ha actualizado.",
+                icon: "success",
+                confirmButtonColor: "#2563eb",
+                confirmButtonText: "Aceptar",
+                background: "#fefefe",
+                color: "#1e293b",
+                timer: 2000,
+                timerProgressBar: true,
+            }).then(() => navigate("/admin"));
+        } catch (err) {
+            Swal.fire({
+                title: "Error",
+                text: "No se pudo actualizar el anuncio.",
+                icon: "error",
+                confirmButtonColor: "#dc2626",
+            });
+        }
     };
 
     return (
         <div className="flex flex-col items-stretch bg-white p-32 rounded-xl shadow-lg w-500 h-full">
             <header className="bg-dark-green p-16 rounded-xl mb-8 text-center shadow-lg">
-                <h2 className="m-0 text-center text-[1.5rem] text-white">Actualizar Anuncio</h2>
+                <h2 style={{color: "white"}} className="m-0 text-center text-[1.5rem] text-white">Actualizar Anuncio</h2>
             </header>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 shadow-lg rounded-xl w-full my-8 mx-0 p-16 bf-white">
                 <div className="flex flex-col gap-4">

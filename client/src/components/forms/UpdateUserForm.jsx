@@ -1,33 +1,61 @@
 import { useForm } from "react-hook-form";
-import { useParams, useNavigate, Link } from "react-router";
-import bcrypt from "bcryptjs";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
+import Swal from "sweetalert2";
 
 export default function UpdateUserForm({ user, close }) {
-
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm({ defaultValues: user });
-    const params = useParams();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm({
+        defaultValues: { ...(user ?? {}), password: "" }
+    });
+    const navigate = useNavigate();
     const { updateProfile } = useAuth();
 
-    const handleReload = () => {
-        window.location.reload();
-    };
-
-    const onSubmit = (data) => {
-        if (data.password) {
-            const salt = bcrypt.genSaltSync(10);
-            data.password = bcrypt.hashSync(data.password, salt);
+    useEffect(() => {
+        if (user) {
+            reset({ ...user, password: "" });
         }
-        if (user.id) {
-            updateProfile(user.id, data);
-            window.location.reload();
+    }, [user, reset]);
+
+    const onSubmit = async (data) => {
+        const payload = { ...data };
+
+        // si no escribió contraseña -> no la enviamos
+        if (!payload.password || payload.password.trim() === "") {
+            delete payload.password;
+        }
+        // NO hashear en el cliente: el backend debe encargarse del hashing
+
+        if (user?.id) {
+            try {
+                await updateProfile(user.id, payload);
+                await Swal.fire({
+                    title: "Actualizado",
+                    text: "Datos del usuario actualizado correctamente.",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                });
+                close();
+                await new Promise((resolve) => setTimeout(resolve, 600));
+                navigate("/admin");
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    title: "Error",
+                    text: "Ocurrió un error al actualizar al usuario.",
+                    icon: "error",
+                    confirmButtonColor: "#d33",
+                });
+            }
         }
     };
 
     return (
         <div className="flex flex-col items-stretch bg-white p-32 rounded-xl shadow-lg w-500 h-full">
             <header className="bg-dark-green p-16 rounded-xl mb-8 text-center shadow-lg">
-                <h2 className="m-0 text-center text-[1.5rem] text-white">Actualizar Usuario</h2>
+                <h2 style={{ color: "white" }} className="m-0 text-center text-[1.5rem] text-white">Actualizar Usuario</h2>
             </header>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 shadow-lg rounded-xl w-full my-8 mx-0 p-16 bf-white">
                 <div className="flex flex-col gap-4">

@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { useAuth } from "../../context/AuthContext"; 
+import { useAuth } from "../../context/AuthContext";
 import { useTask } from "../../context/TaskContext.jsx";
-import assets from "../../assets"; 
+import assets from "../../assets";
+import Swal from "sweetalert2";
 import "./Schedules.css";
 
 export default function Schedule() {
     const [showForm, setShowForm] = useState(false);
-    const [editMode, setEditMode] = useState(null); 
-    const [editableName, setEditableName] = useState(""); 
-    const [dropdownVisible, setDropdownVisible] = useState(false); 
+    const [editMode, setEditMode] = useState(null);
+    const [editableName, setEditableName] = useState("");
+    const [dropdownVisible, setDropdownVisible] = useState(false);
 
-    const navigate = useNavigate(); 
-    const { logout, user } = useAuth();
+    const navigate = useNavigate();
+    const { logout } = useAuth();
     const { createScheduleVigilant } = useTask();
 
     const [scheduleData, setScheduleData] = useState([
@@ -40,10 +41,37 @@ export default function Schedule() {
 
     const handleAddEntry = async (e) => {
         e.preventDefault();
-    
+
+        // Regex para validar el formato de tiempo "HH:MM - HH:MM"
+        const timePattern = /^([01]?[0-9]|2[0-3]):([0-5]?[0-9])\s*[-]?\s*([01]?[0-9]|2[0-3]):([0-5]?[0-9])$/;
+
+        const isValidTime = (time) => {
+            return time === "" || timePattern.test(time);  // Permitir vacío o formato de hora válido
+        };
+
+        // Validación de cada campo (lunes, martes, etc.)
+        if (
+            !isValidTime(newEntry.lunes) ||
+            !isValidTime(newEntry.martes) ||
+            !isValidTime(newEntry.miercoles) ||
+            !isValidTime(newEntry.jueves) ||
+            !isValidTime(newEntry.viernes) ||
+            !isValidTime(newEntry.sabado) ||
+            !isValidTime(newEntry.domingo)
+        ) {
+            // Mostrar alerta con SweetAlert2 si la validación falla
+            Swal.fire({
+                icon: 'error',
+                title: 'Formato de hora inválido',
+                text: 'Por favor, ingresa un formato de tiempo válido para cada día (ej: 9:00 - 17:00).',
+                confirmButtonText: 'Aceptar'
+            });
+            return; // Detener el envío del formulario si los datos no son válidos
+        }
+
         try {
             await createScheduleVigilant(newEntry);
-    
+
             const updatedData = scheduleData.map((row) => {
                 if (row.name === newEntry.name) {
                     return { ...row, ...newEntry };
@@ -51,10 +79,10 @@ export default function Schedule() {
                     return row;
                 }
             });
-    
+
             setScheduleData(updatedData);
             setShowForm(false);
-    
+
             setNewEntry({
                 name: "",
                 lunes: "",
@@ -69,7 +97,7 @@ export default function Schedule() {
             console.error("Error al guardar el horario en la base de datos:", error);
         }
     };
-    
+
     const enableEditMode = (index) => {
         setEditMode(index);
         setEditableName(scheduleData[index].name);
@@ -97,8 +125,8 @@ export default function Schedule() {
     };
 
     const handleLogout = () => {
-        logout(); 
-        navigate("/"); 
+        logout();
+        navigate("/");
     };
 
     return (
@@ -111,7 +139,7 @@ export default function Schedule() {
                             src={assets.casa}
                             alt="Inicio"
                             className="menu-icon"
-                            onClick={() => navigate("/vigilant")} 
+                            onClick={() => navigate("/vigilant")}
                         />
                         <div className="user-menu">
                             <img
@@ -122,11 +150,11 @@ export default function Schedule() {
                             />
                             {dropdownVisible && (
                                 <ul className="dropdown">
-                                    <li onClick={() => navigate("/profileVigilant")}> 
+                                    <li onClick={() => navigate("/profileVigilant")}>
                                         <img src={assets.ojo} alt="Ver perfil" className="dropdown-icon" />
                                         Ver perfil
                                     </li>
-                                    <li onClick={handleLogout}> 
+                                    <li onClick={handleLogout}>
                                         <img src={assets.cerrarSesion} alt="Cerrar sesión" className="dropdown-icon" />
                                         Cerrar sesión
                                     </li>
