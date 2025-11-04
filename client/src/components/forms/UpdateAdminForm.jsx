@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
+import bcrypt from "bcryptjs";
 import Swal from "sweetalert2";
 
 export default function UpdateAdminForm({ user, close }) {
@@ -23,9 +24,7 @@ export default function UpdateAdminForm({ user, close }) {
         // si no escribió contraseña -> no la enviamos
         if (!payload.password || payload.password.trim() === "") {
             delete payload.password;
-        }
-        // NO hashear en el cliente: el backend debe encargarse del hashing
-
+        } 
         if (user?.id) {
             try {
                 await updateProfile(user.id, payload);
@@ -92,7 +91,7 @@ export default function UpdateAdminForm({ user, close }) {
                     <label htmlFor="password" className="text-[1rem] font-[600] text-dark-slate">Contraseña</label>
                     <input type="password" {...register("password")}
                         className="p-12 border border-mid-gray rounded-lg font-[1rem]"
-                        placeholder="Ingrese una contraseña para el usuario"
+                        placeholder="¿Si desea cambiar su contraseña? ingrese una segura"
                     />
                     {
                         errors.password && (<p className="text-red text-[0.8rem]">La contraseña es requerida</p>)

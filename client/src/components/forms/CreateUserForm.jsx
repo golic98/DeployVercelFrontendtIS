@@ -5,8 +5,12 @@ import Swal from "sweetalert2";
 
 export default function CreateUserForm({ close }) {
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
-    const { createUser } = useAuth();
+    const { createUser, errors: signinErrorsRaw } = useAuth();
     const navigate = useNavigate();
+
+    const signinErrors = Array.isArray(signinErrorsRaw)
+        ? signinErrorsRaw
+        : (signinErrorsRaw ? [signinErrorsRaw] : []);
 
     const onSubmit = async (data) => {
         try {
@@ -25,7 +29,7 @@ export default function CreateUserForm({ close }) {
         } catch (error) {
             Swal.fire({
                 title: "Error",
-                text: "No se pudo crear al usuario.",
+                text: "No se pudo crear al usuario, revisar que los campos cumplan con su estructura o revise que el usuario o el correo sean únicos.",
                 icon: "error",
                 confirmButtonColor: "#dc2626",
             });
@@ -42,7 +46,7 @@ export default function CreateUserForm({ close }) {
                     <label htmlFor="name" className="text-[1rem] font-[600] text-dark-slate">Nombre</label>
                     <input id="name" type="text" {...register("name", { required: true })}
                         className="p-12 border border-mid-gray rounded-lg font-[1rem]"
-                        placeholder="Ingrese el nombre del usuario"
+                        placeholder="Ingrese el nombre del usuario (nombres y apellidos)"
                     />
                     {
                         errors.name && (<p className="text-red text-[0.8rem]">El nombre es requerido</p>)
@@ -52,7 +56,7 @@ export default function CreateUserForm({ close }) {
                     <label htmlFor="username" className="text-[1rem] font-[600] text-dark-slate">Username</label>
                     <input id="username" type="text" {...register("username", { required: true })}
                         className="p-12 border border-mid-gray rounded-lg font-[1rem]"
-                        placeholder="Ingrese el usuario nuevo"
+                        placeholder="Ingrese un usuario nuevo"
                     />
                     {
                         errors.username && (<p className="text-red text-[0.8rem]">El usuario es requerido</p>)
@@ -62,7 +66,7 @@ export default function CreateUserForm({ close }) {
                     <label htmlFor="email" className="text-[1rem] font-[600] text-dark-slate">Email</label>
                     <input id="email" type="email" {...register("email", { required: true })}
                         className="p-12 border border-mid-gray rounded-lg font-[1rem]"
-                        placeholder="Ingrese su email"
+                        placeholder="Ingrese su email (example@gmail.com)"
                     />
                     {
                         errors.email && (<p className="text-red text-[0.8rem]">El email es requerido</p>)
@@ -72,7 +76,7 @@ export default function CreateUserForm({ close }) {
                     <label htmlFor="password" className="text-[1rem] font-[600] text-dark-slate">Contraseña</label>
                     <input id="password" type="password" {...register("password", { required: true })}
                         className="p-12 border border-mid-gray rounded-lg font-[1rem]"
-                        placeholder="Ingrese una contraseña para el usuario"
+                        placeholder="Ingrese una contraseña para el usuario (mínimo 12 cáracteres)"
                     />
                     {
                         errors.password && (<p className="text-red text-[0.8rem]">La contraseña es requerida</p>)
@@ -82,7 +86,7 @@ export default function CreateUserForm({ close }) {
                     <label htmlFor="telephone" className="text-[1rem] font-[600] text-dark-slate">Teléfono</label>
                     <input id="telephone" type="text" {...register("telephone", { required: true })}
                         className="p-12 border border-mid-gray rounded-lg font-[1rem]"
-                        placeholder="Ingrese el número de telefono"
+                        placeholder="Ingrese el número de télefono (mínimo de 8 dígitos)"
                     />
                     {
                         errors.telephone && (<p className="text-red text-[0.8rem]">El teléfono es requerido</p>)
@@ -99,7 +103,7 @@ export default function CreateUserForm({ close }) {
                             min: { value: 0, message: "La edad no puede ser negativa" }
                         })}
                         className="p-12 border border-mid-gray rounded-lg font-[1rem]"
-                        placeholder="Ingrese la edad"
+                        placeholder="Ingrese la edad (mayor de 18 años)"
                     />
 
                     {

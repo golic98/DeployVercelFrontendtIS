@@ -3,8 +3,8 @@ import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
-import "./Login.css";
 import ResetPassword from "../login-access/ResetPassword";
+import "./Login.css";
 
 function Login({ onClose }) {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -47,7 +47,7 @@ function Login({ onClose }) {
     return (
         <div className="login-modal-overlay">
             <div className="login-modal">
-                <h2 className="login-title">Inicia sesión</h2>
+                <h2 className="login-title">Inicio de sesión</h2>
                 <div className="login-divider">
                     <hr className="login-divider-line" />
                     <hr className="login-divider-line" />
@@ -77,7 +77,7 @@ function Login({ onClose }) {
 
                 <p style={{ color: "white" }}>¿Olvidaste tu clave? <Link to={"/"} style={{ color: "white" }} className="login-register-link" onClick={handleReserPasswordClick}>Cambiar clave</Link></p>
                 <p style={{ color: "white" }}>¿No tienes cuenta? <Link to={"/register"} style={{ color: "white" }} className="login-register-link">Ve a registrarte</Link> </p>
-                <button style={{ padding: "8px", cursor: "pointer" }} onClick={onClose}>Cancelar</button>
+                <button style={{ padding: "8px", cursor: "pointer", color: "gray" }} onClick={onClose}>Cancelar</button>
             </div>
             {showResetPassword && <ResetPassword onClose={handleCloseReserPasswordClick} />}
         </div>

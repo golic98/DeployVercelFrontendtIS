@@ -55,7 +55,9 @@ export const AuthProvider = ({ children }) => {
             setUser(res.data);
             setIsAuthenticate(true);
         } catch (error) {
-            console.log(error);
+            console.log("Error");
+            setErrors(["Vuelva a intentarlo o contacte con el administrador"]);
+            throw error;
         }
     }
 
@@ -64,17 +66,21 @@ export const AuthProvider = ({ children }) => {
             const res = await loginRequest(user);
             setUser(res.data);
             setIsAuthenticate(true);
+            setErrors([]);
         } catch (error) {
             console.log("Revise que los campos sean correctos");
+            setErrors(["Revise que los campos sean correctos"]);
         }
     }
 
     const createUser = async (userData) => {
         try {
             await registerRequestByAdmin(userData);
+            setErrors([]);
         } catch (error) {
-            const data = error.response?.data || { message: "Error desconocido" };
-            setErrors(Array.isArray(data) ? data : [data.message || data]);
+            console.log("Error");
+            setErrors(["Revise que los campos sean correctos"]);
+            throw error;
         }
     };
 

@@ -23,7 +23,6 @@ export default function UserNormalAnunciosView() {
                 {close => <CreateTaskForm close={close} />}
             </Popup>
             <TaskTableUserNormal tasks={tasksAdmin2} />
-
         </div>
     );
 }

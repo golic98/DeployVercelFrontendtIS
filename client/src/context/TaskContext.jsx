@@ -118,7 +118,6 @@ export function TaskProvider({ children }) {
     const deleteTask = async (id) => {
         try {
             const res = await deleteTaskRequest(id);
-            console.log(res);
         } catch (error) {
             console.log(error);
         }
@@ -127,7 +126,6 @@ export function TaskProvider({ children }) {
     const deleteTask2 = async (id) => {
         try {
             const res = await deleteTaskRequest2(id);
-            console.log(res);
         } catch (error) {
             console.log(error);
         }

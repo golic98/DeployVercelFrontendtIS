@@ -92,7 +92,7 @@ export default function UpdateUserNormalForm({ user, close }) {
                     <label htmlFor="password" className="text-[1rem] font-[600] text-dark-slate">Contraseña</label>
                     <input type="password" {...register("password")}
                         className="p-12 border border-mid-gray rounded-lg font-[1rem]"
-                        placeholder="Ingrese una contraseña para el usuario"
+                        placeholder="¿Si desea cambiar su contraseña? ingrese una segura"
                     />
                     {
                         errors.password && (<p className="text-red text-[0.8rem]">La contraseña es requerida</p>)

@@ -7,7 +7,7 @@ import assets from "../../../src/assets";
 import Swal from "sweetalert2";
 import "./ProfileUpdate.css";
 
-export default function ProfileUpdate() {
+export default function ProfileUpdate({ close }) {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const { getOneProfile, updateProfile } = useAuth();
     const params = useParams();
@@ -20,7 +20,6 @@ export default function ProfileUpdate() {
                 setValue("name", profile.name);
                 setValue("username", profile.username);
                 setValue("email", profile.email);
-                setValue("password", profile.password);
                 setValue("telephone", profile.telephone);
                 setValue("age", profile.age);
             }
@@ -28,25 +27,52 @@ export default function ProfileUpdate() {
         loadProfile();
     }, [params.id, setValue, getOneProfile]);
 
-    const onSubmit = handleSubmit(async (data) => {
+    const onSubmit = async (data) => {
         const payload = { ...data };
 
         if (!payload.password || payload.password.trim() === "") {
             delete payload.password;
+        } else {
+            try {
+                const passwordHash = await bcrypt.hash(payload.password, 10);
+                payload.password = passwordHash;
+            } catch (error) {
+                console.error("Error al hashear la contraseña", error);
+                Swal.fire({
+                    title: "Error",
+                    text: "Ocurrió un error al procesar la contraseña.",
+                    icon: "error",
+                    confirmButtonColor: "#d33",
+                });
+                return;
+            }
         }
 
         if (params.id) {
-            await updateProfile(params.id, payload);
-            Swal.fire({
-                title: '¡Perfil actualizado!',
-                text: 'Tus datos han sido actualizados correctamente.',
-                icon: 'success',
-                confirmButtonText: 'Aceptar'
-            }).then(() => {
+            try {
+                await updateProfile(params.id, payload);
+                await Swal.fire({
+                    title: "Actualizado",
+                    text: "Datos del usuario actualizado correctamente.",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                });
+                close();
+                await new Promise((resolve) => setTimeout(resolve, 600));
                 navigate("/profile");
-            });
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    title: "Error",
+                    text: "Ocurrió un error al actualizar al usuario.",
+                    icon: "error",
+                    confirmButtonColor: "#d33",
+                });
+            }
         }
-    });
+    };
 
     return (
         <div>
@@ -77,7 +103,7 @@ export default function ProfileUpdate() {
                 </nav>
             </div>
             <div>
-                <form onSubmit={onSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <input type="text" {...register("name", { required: true })}
                         className=""
                         placeholder="Nombre nuevo"

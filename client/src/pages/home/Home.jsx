@@ -26,7 +26,7 @@ function Home() {
   return (
     <div className="home-root">
       <div className="right-section-home">
-        <h1 style={{color: "white"}}>COMMUNITY DDDA FOR THE PEOPLE</h1>
+        <h1 style={{color: "white"}}>COMUNIDAD DE SERVICIO DDG</h1>
         <div className="join-container-home">
 
           {/* Botones para abrir los modales */}
