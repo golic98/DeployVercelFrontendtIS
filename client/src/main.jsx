@@ -25,7 +25,6 @@ import ProtectedRouteVigilant from "./protected/ProtectedRouteVigilant.jsx";
 import ProtectedRouteUser from "./protected/ProtectedRouteUser.jsx";
 import ProfileUpdate from "./pages/login-access/ProfileUpdate.jsx";
 import ProfileVigilant from "./pages/vigilant/ProfileVigilant.jsx";
-import VigilantUpdate from "./pages/vigilant/VigilantUpdate.jsx";
 import UserNormalReportView from './pages/login-access/UserNormalReportView.jsx'
 import UserNormalAnunciosView from './pages/login-access/UserNormalAnunciosView.jsx'
 import UserNormalView from './pages/login-access/UserNormalView.jsx'
@@ -61,7 +60,6 @@ createRoot(document.getElementById('root')).render(
                   <Route path="/vigilant" element={<Vigilant />}> /</Route>
                   <Route path="/visits" element={<Visits />}> /</Route>
                   <Route path="/profileVigilant" element={<ProfileVigilant />} />
-                  <Route path="/editVigilant/:id" element={<VigilantUpdate />} />
                   <Route path="/schedules" element={<Schedules />}> /</Route>
                 </Route>
               </Route>

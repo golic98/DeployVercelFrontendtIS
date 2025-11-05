@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import assets from "../../assets";
 import HomeCardContainer from "../../components/HomeCardContainer";
-import PayVigilanceForm from "../../components/forms/PayVigilanceForm";
+import PayVigilanceForUserNormal from "../../components/forms/PayVigilanceFormUserNormal";
 import { useState } from "react";
 import Popup from "reactjs-popup";
 
@@ -22,7 +22,7 @@ function UserHome() {
             <HomeCardContainer cards={menuCards} />
             <Popup open={paying} onClose={closePopup} lockScroll={true} position="top center" closeOnDocumentClick={false} modal={true}
                 overlayStyle={{ background: 'rgba(0,0,0,0.5)' }} contentStyle={{ maxHeight: '95%', overflow: 'auto' }}>
-                <PayVigilanceForm close={closePopup} />
+                <PayVigilanceForUserNormal close={closePopup} />
             </Popup>
         </div>
     );

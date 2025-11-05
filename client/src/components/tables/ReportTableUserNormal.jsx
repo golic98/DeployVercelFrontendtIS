@@ -10,7 +10,6 @@ export default function ReportTableUserNormal({ reports }) {
     const { deleteTask } = useTask();
     const [editing, editReport] = useState();
     const closePopup = () => editReport(null);
-    const navigate = useNavigate();
 
     const fields = {
         title: { width: 300 },

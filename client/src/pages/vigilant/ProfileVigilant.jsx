@@ -1,6 +1,6 @@
 import { useAuth } from "../../context/AuthContext";
 import assets from "../../../src/assets";
-import UpdateAdminForm from "../../components/forms/UpdateAdminForm";
+import UpdateVigilantForm from "../../components/forms/UpdateVigilantForm";
 import Popup from "reactjs-popup";
 
 export default function ProfileVigilant() {
@@ -19,7 +19,7 @@ export default function ProfileVigilant() {
                     duration-300 ease-in-out shadow-md hover:bg-dark-slate">Editar Perfil</button>} lockScroll={true}
                         position="top center" closeOnDocumentClick={false} modal={true} overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
                         contentStyle={{ maxHeight: '95%', overflow: 'auto' }}>
-                        {close => <UpdateAdminForm user={user} close={close} />}
+                        {close => <UpdateVigilantForm user={user} close={close} />}
                     </Popup>
                 </div>
 

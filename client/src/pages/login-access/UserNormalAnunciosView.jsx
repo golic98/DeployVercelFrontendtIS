@@ -1,6 +1,6 @@
 import Popup from "reactjs-popup";
 import TaskTableUserNormal from "../../components/tables/TaskTableUserNormal";
-import CreateTaskForm from "../../components/forms/CreateTaskForm";
+import CreateTaskFormUserNormal from "../../components/forms/CreateTaskFormUserNormal";
 import { useTask } from "../../context/TaskContext";
 import { useEffect } from "react";
 import CreateButton from "../../components/CreateButton";
@@ -20,7 +20,7 @@ export default function UserNormalAnunciosView() {
             <Popup trigger={<button><CreateButton text="Crear Anuncio" /></button>} lockScroll={true}
                 position="top center" closeOnDocumentClick={false} modal={true} overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
                 contentStyle={{ maxHeight: '95%', overflow: 'auto' }}>
-                {close => <CreateTaskForm close={close} />}
+                {close => <CreateTaskFormUserNormal close={close} />}
             </Popup>
             <TaskTableUserNormal tasks={tasksAdmin2} />
         </div>

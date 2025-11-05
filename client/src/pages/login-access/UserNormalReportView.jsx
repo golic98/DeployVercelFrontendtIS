@@ -1,6 +1,6 @@
 import Popup from "reactjs-popup";
 import ReportTableUserNormal from "../../components/tables/ReportTableUserNormal";
-import CreateReportForm from "../../components/forms/CreateReportForm";
+import CreateReportFormUserNormal from "../../components/forms/CreateReportFormUserNormal";
 import { useTask } from "../../context/TaskContext";
 import { useEffect } from "react";
 import CreateButton from "../../components/CreateButton";
@@ -21,7 +21,7 @@ export default function UserNormalReportView() {
             <Popup trigger={<button><CreateButton text="Crear Reporte" /></button>} lockScroll={true}
                 position="top center" closeOnDocumentClick={false} modal={true} overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
                 contentStyle={{ maxHeight: '95%', overflow: 'auto' }}>
-                {close => <CreateReportForm close={close} />}
+                {close => <CreateReportFormUserNormal close={close} />}
             </Popup>
             <ReportTableUserNormal reports={tasksAdmin} />
 
