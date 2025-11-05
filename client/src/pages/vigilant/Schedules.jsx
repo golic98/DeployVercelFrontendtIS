@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../context/AuthContext";
 import { useTask } from "../../context/TaskContext.jsx";
@@ -14,14 +14,16 @@ export default function Schedule() {
 
     const navigate = useNavigate();
     const { logout } = useAuth();
-    const { createScheduleVigilant } = useTask();
+    const { createScheduleVigilant, getSchedules } = useTask();
 
-    const [scheduleData, setScheduleData] = useState([
+    const defaultScheduleData = [
         { name: "Rodolfo Castro", lunes: "", martes: "", miercoles: "", jueves: "", viernes: "", sabado: "", domingo: "" },
         { name: "Francisco Hernandez", lunes: "", martes: "", miercoles: "", jueves: "", viernes: "", sabado: "", domingo: "" },
         { name: "Roberto Flores", lunes: "", martes: "", miercoles: "", jueves: "", viernes: "", sabado: "", domingo: "" },
         { name: "Vicente Fernandez", lunes: "", martes: "", miercoles: "", jueves: "", viernes: "", sabado: "", domingo: "" },
-    ]);
+    ];
+
+    const [scheduleData, setScheduleData] = useState(defaultScheduleData);
 
     const [newEntry, setNewEntry] = useState({
         name: "",
@@ -34,6 +36,82 @@ export default function Schedule() {
         domingo: "",
     });
 
+    const normalizeKey = (item) => {
+      if (!item) return null;
+      const raw = item._id ?? item.id ?? item.name;
+      if (!raw) return null;
+      return String(raw).trim().toLowerCase();
+    };
+
+    const dedupeByKey = (arr) => {
+      const map = new Map();
+      (arr || []).forEach(item => {
+        if (!item) return;
+        const key = normalizeKey(item) || `__no_key__${Math.random().toString(36).slice(2)}`;
+        map.set(key, { ...(map.get(key) || {}), ...item });
+      });
+      return Array.from(map.values());
+    };
+
+    useEffect(() => {
+        fetchSchedules();
+    }, []);
+
+    const fetchSchedules = async () => {
+        try {
+            const res = await getSchedules();
+            let data = res?.data?.schedules ?? res?.data ?? res ?? [];
+
+            if (!Array.isArray(data) && typeof data === "object" && data !== null) {
+                const arr = Object.values(data).find(v => Array.isArray(v));
+                if (arr) data = arr;
+                else data = [];
+            }
+            if (!Array.isArray(data)) data = [];
+
+            setScheduleData(prev => {
+                const combined = [...prev, ...data];
+                const deduped = dedupeByKey(combined);
+                return deduped.length ? deduped : (prev.length ? prev : defaultScheduleData);
+            });
+        } catch (error) {
+            console.error("Error fetching schedules with getSchedules:", error);
+        }
+    };
+
+    const handleSelectChange = (e) => {
+        const selectedName = e.target.value;
+        if (!selectedName) {
+            setNewEntry({
+                name: "",
+                lunes: "",
+                martes: "",
+                miercoles: "",
+                jueves: "",
+                viernes: "",
+                sabado: "",
+                domingo: "",
+            });
+            return;
+        }
+
+        const existing = scheduleData.find(s => (s.name ?? "").toString().trim().toLowerCase() === selectedName.toString().trim().toLowerCase());
+        if (existing) {
+            setNewEntry({
+                name: existing.name ?? selectedName,
+                lunes: existing.lunes ?? "",
+                martes: existing.martes ?? "",
+                miercoles: existing.miercoles ?? "",
+                jueves: existing.jueves ?? "",
+                viernes: existing.viernes ?? "",
+                sabado: existing.sabado ?? "",
+                domingo: existing.domingo ?? "",
+            });
+        } else {
+            setNewEntry(prev => ({ ...prev, name: selectedName }));
+        }
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setNewEntry({ ...newEntry, [name]: value });
@@ -42,14 +120,11 @@ export default function Schedule() {
     const handleAddEntry = async (e) => {
         e.preventDefault();
 
-        // Regex para validar el formato de tiempo "HH:MM - HH:MM"
         const timePattern = /^([01]?[0-9]|2[0-3]):([0-5]?[0-9])\s*[-]?\s*([01]?[0-9]|2[0-3]):([0-5]?[0-9])$/;
-
         const isValidTime = (time) => {
-            return time === "" || timePattern.test(time);  // Permitir vacío o formato de hora válido
+            return time === "" || timePattern.test(time);
         };
 
-        // Validación de cada campo (lunes, martes, etc.)
         if (
             !isValidTime(newEntry.lunes) ||
             !isValidTime(newEntry.martes) ||
@@ -59,30 +134,34 @@ export default function Schedule() {
             !isValidTime(newEntry.sabado) ||
             !isValidTime(newEntry.domingo)
         ) {
-            // Mostrar alerta con SweetAlert2 si la validación falla
             Swal.fire({
                 icon: 'error',
                 title: 'Formato de hora inválido',
                 text: 'Por favor, ingresa un formato de tiempo válido para cada día (ej: 9:00 - 17:00).',
                 confirmButtonText: 'Aceptar'
             });
-            return; // Detener el envío del formulario si los datos no son válidos
+            return;
         }
 
         try {
-            await createScheduleVigilant(newEntry);
+            const res = await createScheduleVigilant(newEntry);
+            console.log("createScheduleVigilant response:", res);
 
-            const updatedData = scheduleData.map((row) => {
-                if (row.name === newEntry.name) {
-                    return { ...row, ...newEntry };
-                } else {
-                    return row;
-                }
+            const created = res?.data ?? res ?? null;
+
+            let incoming = [];
+            if (Array.isArray(created)) incoming = created;
+            else if (created && typeof created === "object" && Array.isArray(created.schedules)) incoming = created.schedules;
+            else if (created && typeof created === "object") incoming = [created];
+            else incoming = [newEntry];
+
+            setScheduleData(prev => {
+                const combined = [...prev, ...incoming];
+                const deduped = dedupeByKey(combined);
+                return deduped.length ? deduped : prev;
             });
 
-            setScheduleData(updatedData);
             setShowForm(false);
-
             setNewEntry({
                 name: "",
                 lunes: "",
@@ -95,6 +174,7 @@ export default function Schedule() {
             });
         } catch (error) {
             console.error("Error al guardar el horario en la base de datos:", error);
+            Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo guardar el horario.' });
         }
     };
 
@@ -129,9 +209,17 @@ export default function Schedule() {
         navigate("/");
     };
 
+    const uniqueNamesForSelect = Array.from(
+        scheduleData.reduce((acc, row) => {
+            if (!row || !row.name) return acc;
+            const key = row.name.toString().trim().toLowerCase();
+            if (!acc.has(key)) acc.set(key, row.name);
+            return acc;
+        }, new Map())
+    );
+
     return (
         <div className="schedule">
-            {/* Contenido principal */}
             <div className="schedule-content">
                 <div className="add-schedule-wrapper">
                     <div className="add-schedule" onClick={() => setShowForm(true)}>
@@ -154,13 +242,13 @@ export default function Schedule() {
                                     id="name"
                                     name="name"
                                     value={newEntry.name}
-                                    onChange={handleChange}
+                                    onChange={handleSelectChange}
                                     required
                                 >
                                     <option value="">Selecciona un vigilante</option>
-                                    {scheduleData.map((row, index) => (
-                                        <option key={index} value={row.name}>
-                                            {row.name}
+                                    {uniqueNamesForSelect.map(([key, name]) => (
+                                        <option key={key} value={name}>
+                                            {name}
                                         </option>
                                     ))}
                                 </select>
@@ -239,7 +327,19 @@ export default function Schedule() {
                                     <button
                                         type="button"
                                         className="cancel-button"
-                                        onClick={() => setShowForm(false)}
+                                        onClick={() => {
+                                            setShowForm(false);
+                                            setNewEntry({
+                                                name: "",
+                                                lunes: "",
+                                                martes: "",
+                                                miercoles: "",
+                                                jueves: "",
+                                                viernes: "",
+                                                sabado: "",
+                                                domingo: "",
+                                            });
+                                        }}
                                     >
                                         Cancelar
                                     </button>

@@ -3,14 +3,10 @@ import TableCard from "./TableRow";
 import TableView from "./TableView";
 import UpadteTaskForm from "../forms/UpdateTaskForm";
 import { useState } from "react";
-import { useTask } from "../../context/TaskContext";
-import { useNavigate } from "react-router";
 
 export default function TaskTableUserNormal({ tasks }) {
-    const { deleteTask2 } = useTask();
     const [editing, editTask] = useState();
     const closePopup = () => editTask(null);
-    const navigate = useNavigate();
 
     const fields = {
         title: { width: 300 },

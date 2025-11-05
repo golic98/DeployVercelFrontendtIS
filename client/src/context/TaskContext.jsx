@@ -184,7 +184,8 @@ export function TaskProvider({ children }) {
     const getSchedules = async () => {
         try {
             const res = await getAllSchedule();
-            setSchedules(res.data);
+            //setSchedules(res.data);
+            return res;
         } catch (error) {
             console.log(error);
         }

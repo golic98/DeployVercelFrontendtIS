@@ -30,7 +30,7 @@ export default function TaskTable({ tasks }) {
                     <TableCard key={i._id}>
                         <h2 className="text-[1.5rem] text-dark-gray font-bold">{i.title2}</h2>
                         <p className="text-[1rem] text-light-gray">{i.description2}</p>
-                        <p className="text-[1rem] text-light-gray">Publicado: {new Date(i.date).toLocaleDateString()}</p>
+                        <p className="text-[1rem] text-light-gray">Publicados: {new Date(i.date2).toLocaleDateString()}</p>
                         <p className="text-[1rem] text-light-gray">ID usuario: {i.user}</p>
                         <img className="" src={i.image} alt="Task Image" />
                         <span className="flex flex-row gap-16 justify-evenly">
