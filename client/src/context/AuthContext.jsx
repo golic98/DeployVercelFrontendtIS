@@ -64,9 +64,10 @@ export const AuthProvider = ({ children }) => {
     const signin = async (user) => {
         try {
             const res = await loginRequest(user);
-            setUser(res.data.user);
+            setUser(res.data);
             setIsAuthenticate(true);
             setErrors([]);
+            console.log(res.data);
         } catch (error) {
             console.log("Revise que los campos sean correctos");
             setErrors(["Revise que los campos sean correctos"]);
