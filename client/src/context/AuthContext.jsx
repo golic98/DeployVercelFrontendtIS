@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }) => {
             setErrors([]);
             console.log(res.data);
         } catch (error) {
-            console.log("Revise que los campos sean correctos");
+            console.log("Revise que los campos sean correctoss");
             setErrors(["Revise que los campos sean correctos"]);
         }
     }
