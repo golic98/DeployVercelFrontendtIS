@@ -67,9 +67,9 @@ export const AuthProvider = ({ children }) => {
             setUser(res.data);
             setIsAuthenticate(true);
             setErrors([]);
-            console.log(res.data);
         } catch (error) {
-            console.log("Revise que los campos sean correctoss");
+            console.log("Revise que los campos sean correctos");
+            console.log(res.data);
             setErrors(["Revise que los campos sean correctos"]);
         }
     }
