@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
     const signin = async (user) => {
         try {
             const res = await loginRequest(user);
-            setUser(res.data.user);
+            setUser(res.data);
             setIsAuthenticate(true);
             setErrors([]);
         } catch (error) {
