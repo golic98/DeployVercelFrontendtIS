@@ -12,8 +12,8 @@ export default function ProfileVigilant() {
             <div className="flex flex-row gap-32 w-9/10 max-w-1200 items-start">
                 <div className="flex grow-1 text-center flex-col items-center gap-24">
                     <img src={assets.usuario1} alt="Usuario" className="profile-pic" />
-                    <h2 className="text-[2rem] my-8 mx-0 text-dark-slate">Administrador</h2>
-                    <p className="text-[1.2rem] my-8 ml-0 text-light-gray">Administrador general de ésta organización</p>
+                    <h2 className="text-[2rem] my-8 mx-0 text-dark-slate">Vigilante administrador</h2>
+                    <p className="text-[1.2rem] my-8 ml-0 text-light-gray">Persona encargada de gestionar funciones de vigilante</p>
 
                     <Popup trigger={<button className="bg-light-slate text-white py-12 px-24 rounded-md text-[1rem]
                     duration-300 ease-in-out shadow-md hover:bg-dark-slate">Editar Perfil</button>} lockScroll={true}
