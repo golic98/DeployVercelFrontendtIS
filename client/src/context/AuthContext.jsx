@@ -67,7 +67,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await loginRequest(credentials);
       persistToken(res.data.token);
-      console.log(res.data.token);
       setUser(res.data.user);
       setIsAuthenticate(true);
     } catch (error) {
