@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
   const signin = async (credentials) => {
     try {
       const res = await loginRequest(credentials);
-      persistToken(res.data.token);
+      //persistToken(res.data.token);
       setUser(res.data.user);
       setIsAuthenticate(true);
     } catch (error) {
@@ -152,14 +152,8 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkLogin = async () => {
-      const token = Cookies.get("token");
-      if (!token) {
-        setIsAuthenticate(false);
-        setLoading(false);
-        return;
-      }
       try {
-        const res = await verifyTokenRequest(token);
+        const res = await verifyTokenRequest();
         if (res.data) {
           setUser(res.data);
           setIsAuthenticate(true);
