@@ -58,8 +58,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await registerRequest(userData);
     } catch (error) {
-      const data = error.response?.data;
-      setErrors(Array.isArray(data) ? data : [data.message || data]);
+      console.log("Error");
+      setErrors(["Vuelva a intentarlo o contacte con el administrador"]);
+      throw error;
     }
   };
 
