@@ -78,9 +78,11 @@ export const AuthProvider = ({ children }) => {
   const createUser = async (userData) => {
     try {
       await registerRequestByAdmin(userData);
+      setErrors([]);
     } catch (error) {
       const data = error.response?.data || { message: "Error desconocido" };
       setErrors(Array.isArray(data) ? data : [data.message || data]);
+      throw error;
     }
   };
 
