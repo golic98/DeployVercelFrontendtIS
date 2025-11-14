@@ -69,9 +69,10 @@ export const AuthProvider = ({ children }) => {
       persistToken(res.data.token);
       setUser(res.data.user);
       setIsAuthenticate(true);
+      setErrors([]);
     } catch (error) {
-      const data = error.response?.data;
-      setErrors(Array.isArray(data) ? data : [data.message || data]);
+      console.log("Revise que los campos sean correctos");
+      setErrors(["Revise que los campos sean correctos"]);
     }
   };
 
