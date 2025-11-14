@@ -1,9 +1,8 @@
 import axios from "axios";
 const instance = axios.create({
-    baseURL: import.meta.env.VITE_APP_API_URL,
+    baseURL: "https://deploy-vercel-backend-is.vercel.app/api",
     withCredentials: true,
     timeout: 10000
 });
-console.log("API baseURL:", import.meta.env.VITE_APP_API_URL);
 
 export default instance;
