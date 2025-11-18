@@ -54,7 +54,7 @@ function ResetPassword({ onClose }) {
                             <p className="login-error-text">La contraseña nueva es requerida</p>
                         )
                     }
-                    <button style={{ color: "gray" }}  type="submit" className="login-button">Aceptar</button>
+                    <button style={{ color: "white" }}  type="submit" className="login-button">Aceptar</button>
                     <button type="button" onClick={onClose}>Cancelar</button>
                 </form>
             </div>
