@@ -31,6 +31,7 @@ function ResetPassword({ onClose }) {
                 }
                 <form onSubmit={onSubmit} className="login-form">
                     <input
+                         style={{ color: "white" }} 
                         type="text"
                         {...register("username", { required: true })}
                         className="login-input"
@@ -42,6 +43,7 @@ function ResetPassword({ onClose }) {
                         )
                     }
                     <input
+                        style={{ color: "white" }} 
                         type="password"
                         {...register("password", { required: true })}
                         className="login-input"
@@ -52,7 +54,7 @@ function ResetPassword({ onClose }) {
                             <p className="login-error-text">La contraseña nueva es requerida</p>
                         )
                     }
-                    <button type="submit" className="login-button">Aceptar</button>
+                    <button style={{ color: "gray" }}  type="submit" className="login-button">Aceptar</button>
                     <button type="button" onClick={onClose}>Cancelar</button>
                 </form>
             </div>
