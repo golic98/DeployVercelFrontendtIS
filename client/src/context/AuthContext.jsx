@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }) => {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pay, setPay] = useState(null);
+  const [authLoading, setAuthLoading] = useState(false);
 
   const persistToken = (token) => {
     Cookies.set("token", token, {
@@ -66,14 +67,23 @@ export const AuthProvider = ({ children }) => {
 
   const signin = async (credentials) => {
     try {
+      setErrors([]);
+      setAuthLoading(true);
       const res = await loginRequest(credentials);
       persistToken(res.data.token);
       setUser(res.data.user);
       setIsAuthenticate(true);
-      setErrors([]);
+      return res.data;
     } catch (error) {
-      console.log("Revise que los campos sean correctos");
-      setErrors(["Revise que los campos sean correctos"]);
+      const data = error.response?.data;
+      const msgs = Array.isArray(data)
+        ? data
+        : [data?.message || "Revise que los campos sean correctos"];
+      setErrors(msgs);
+      setIsAuthenticate(false);
+      throw error;
+    } finally {
+      setAuthLoading(false);
     }
   };
 
