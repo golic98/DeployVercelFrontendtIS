@@ -215,7 +215,8 @@ export const AuthProvider = ({ children }) => {
         isAuthenticate,
         loading,
         errors,
-        updatePasswordByPassword
+        updatePasswordByPassword,
+        authLoading
       }}
     >
       {children}
