@@ -67,23 +67,14 @@ export const AuthProvider = ({ children }) => {
 
   const signin = async (credentials) => {
     try {
-      setErrors([]);
-      setAuthLoading(true);
       const res = await loginRequest(credentials);
       persistToken(res.data.token);
       setUser(res.data.user);
       setIsAuthenticate(true);
-      return res.data;
+      setErrors([]);
     } catch (error) {
-      const data = error.response?.data;
-      const msgs = Array.isArray(data)
-        ? data
-        : [data?.message || "Revise que los campos sean correctos"];
-      setErrors(msgs);
-      setIsAuthenticate(false);
-      throw error;
-    } finally {
-      setAuthLoading(false);
+      console.log("Revise que los campos sean correctos");
+      setErrors(["Revise que los campos sean correctos"]);
     }
   };
 
@@ -215,8 +206,7 @@ export const AuthProvider = ({ children }) => {
         isAuthenticate,
         loading,
         errors,
-        updatePasswordByPassword,
-        authLoading
+        updatePasswordByPassword
       }}
     >
       {children}
