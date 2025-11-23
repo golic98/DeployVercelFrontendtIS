@@ -23,7 +23,7 @@ export default function UserNormalTable({ users = [] }) {
         <TableView fields={fields}>
             {users.map(i =>
                 <TableCard key={i._id || i.id || Math.random()}>
-                    <h2 className="text-[1.5rem] text-dark-gray font-bold">{i.username}</h2>
+                    <h2 className="text-[1.5rem] text-dark-gray font-bold">{i.name}</h2>
                     <p className="text-[1rem] text-light-gray font-bold">{i.email}</p>
                 </TableCard>
             )}
