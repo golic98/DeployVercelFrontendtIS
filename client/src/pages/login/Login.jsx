@@ -29,6 +29,10 @@ function Login({ onClose }) {
         signin(data);
     });
 
+    function closeForm() {
+        onClose();
+    }
+
     useEffect(() => {
         if (isAuthenticate && user?.role) {
             switch (user.role) {
@@ -76,7 +80,7 @@ function Login({ onClose }) {
                 </form>
 
                 <p style={{ color: "white" }}>¿Olvidaste tu clave? <Link to={"/"} style={{ color: "white" }} className="login-register-link" onClick={handleReserPasswordClick}>Cambiar clave</Link></p>
-                <p style={{ color: "white" }}>¿No tienes cuenta? <Link to={"/register"} style={{ color: "white" }} className="login-register-link">Ve a registrarte</Link> </p>
+                <p  onClick={closeForm} style={{ color: "white" }}>¿No tienes cuenta? <Link to={"/register"} style={{ color: "white" }} className="login-register-link">Ve a registrarte</Link> </p>
                 <button style={{ padding: "8px", cursor: "pointer", color: "gray" }} onClick={onClose}>Cancelar</button>
             </div>
             {showResetPassword && <ResetPassword onClose={handleCloseReserPasswordClick} />}
